@@ -3,48 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía Interactiva de Autoinscripción USIP</title>
+    <title>Paso 2: Plataforma USIP 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chosen Palette: UNAM Blue and Gold -->
-    <!-- Application Structure Plan: A multi-step, wizard-style single-page application. The process is broken down into three logical phases: 1) Account Creation, 2) Email Confirmation, and 3) Course Enrollment. A persistent header shows a progress bar, giving users immediate feedback on their advancement. Navigation is handled by 'Next' and 'Previous' buttons, which control the visibility of content sections (steps). This structure was chosen because a linear, step-by-step process is the most intuitive way to guide a user through a required sequence of actions, reducing cognitive load and preventing users from getting lost, which is a risk with static documents. Visual cues (images) are now added to each step for better guidance. -->
-    <!-- Visualization & Content Choices: 
-        - Process Visualization: A dynamic progress bar (HTML/CSS/JS) was chosen over a static list to visually represent the user's journey. Goal: Show Change. Interaction: Bar updates as user clicks 'Next'. Justification: Provides a clear sense of accomplishment and position within the process.
-        - Step-by-step Guidance: Content is organized into interactive cards (HTML/Tailwind CSS) for each step, now including relevant screenshots with an onerror fallback. Goal: Organize & Inform. Interaction: JS-controlled visibility, showing one step at a time. Justification: Focuses user attention on a single task, simplifying a multi-action process. Images provide direct visual confirmation.
-        - Key Information Reveal: The critical enrollment key is hidden behind a clickable element. Goal: Inform & Engage. Interaction: User must click to reveal the key. Justification: Prevents the key from being missed and adds a small, engaging interactive moment. Library/Method: Vanilla JS.
-        - External Links: Direct links to the platform are provided. Goal: Inform. Interaction: Standard hyperlink. Justification: Simplifies navigation for the user.
-        - Icons: Unicode characters (emojis) are used for visual cues. Goal: Inform & Engage. Justification: Improves scannability and visual appeal without requiring external image files.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #eef5ff; /* Light Blue Background */
+            background-color: #eef5ff;
             color: #1f2937;
         }
-        .step-card {
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-        }
-        .hidden-step {
-            opacity: 0;
-            transform: translateY(20px);
-            position: absolute;
-            pointer-events: none;
-        }
-        .visible-step {
-            opacity: 1;
-            transform: translateY(0);
-            position: static;
-        }
-        .btn {
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-        .progress-bar-fill {
-            transition: width 0.5s ease-in-out;
-        }
+        .step-card { transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; }
+        .hidden-step { opacity: 0; transform: translateY(20px); position: absolute; pointer-events: none; z-index: -1; }
+        .visible-step { opacity: 1; transform: translateY(0); position: static; z-index: 1; }
+        .btn { transition: all 0.3s ease; }
+        .btn:hover { transform: translateY(-2px); }
+        .progress-bar-fill { transition: width 0.5s ease-in-out; }
     </style>
 </head>
 <body class="antialiased">
@@ -53,12 +26,13 @@
 
         <header class="mb-8 text-center">
             <div class="flex justify-center items-center space-x-6 mb-6">
-                <img src="https://res.cloudinary.com/du9jwdogj/image/upload/v1749509572/unnamed_sqccov.png" alt="Logo Facultad de Medicina" class="h-20">
-                <img src="https://res.cloudinary.com/du9jwdogj/image/upload/v1749508546/Escudo-UNAM-escalable.svg_yvsrha.png" alt="Logo UNAM" class="h-24">
-                <img src="https://res.cloudinary.com/du9jwdogj/image/upload/v1749508545/cesiq_logo_placeholder_vnh8jh.png" alt="Logo CESIQ" class="h-20">
+                <img src="https://res.cloudinary.com/du9jwdogj/image/upload/v1749508545/cesiq_logo_placeholder_vnh8jh.png" alt="Logo USIP" class="h-20 drop-shadow-md">
             </div>
-            <h1 class="text-3xl md:text-4xl font-bold text-[#002B5C]">Guía de Autoinscripción USIP</h1>
-            <p class="text-gray-600 mt-2">Taller de Nudos Quirúrgicos Manuales</p>
+            <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full inline-flex font-bold text-sm mb-4 border border-green-200 shadow-sm">
+                ✅ Paso 1: Lugar presencial asegurado
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-[#002B5C]">Paso 2: Acceso a Plataforma USIP 2026</h1>
+            <p class="text-gray-600 mt-2 italic">Taller de Nudos Quirúrgicos Manuales</p>
         </header>
 
         <main class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200">
@@ -66,156 +40,130 @@
             <!-- Progress Bar -->
             <div class="mb-8">
                 <div class="flex justify-between mb-2 text-sm font-medium text-gray-600">
-                    <p>Progreso General</p>
-                    <p id="progress-text">Fase 1 de 3</p>
+                    <p>Estado de la Guía</p>
+                    <p id="progress-text">Introducción</p>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2.5">
-                    <div id="progress-bar" class="bg-[#B38E5D] h-2.5 rounded-full progress-bar-fill" style="width: 10%"></div>
+                    <div id="progress-bar" class="bg-[#B38E5D] h-2.5 rounded-full progress-bar-fill" style="width: 20%"></div>
                 </div>
             </div>
             
-            <div class="relative min-h-[550px] flex flex-col justify-center">
+            <div class="relative min-h-[500px] flex flex-col justify-center">
+                
                 <!-- Step 1: Welcome -->
                 <div id="step-1" class="step-card visible-step">
                     <div class="text-center">
-                        <div class="text-6xl mb-4">👋</div>
-                        <h2 class="text-2xl font-bold text-[#002B5C] mb-2">¡Bienvenido/a!</h2>
-                        <p class="text-gray-600 mb-6 max-w-md mx-auto">Esta guía te llevará paso a paso para inscribirte. Empecemos por ir a la plataforma.</p>
-                        <a href="https://usip.fmposgrado.unam.mx/plataforma/" target="_blank" class="btn inline-block bg-[#002B5C] text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-[#003d82]">
-                            Ir a la Plataforma USIP
-                        </a>
-                        <p class="text-xs text-gray-500 mt-3">Se abrirá en una nueva pestaña. Vuelve aquí para continuar.</p>
+                        <div class="text-6xl mb-4">🛑</div>
+                        <h2 class="text-2xl font-bold text-[#002B5C] mb-2">¡Instrucciones de Acceso!</h2>
+                        <div class="bg-blue-50 border-l-4 border-[#002B5C] p-4 max-w-lg mx-auto text-left mb-6 rounded-r-lg shadow-sm">
+                            <p class="text-gray-700 text-sm">Tu fecha para el taller presencial está lista. Ahora debes inscribirte en la plataforma para el material teórico de la **Edición 2026**.</p>
+                        </div>
+                        <p class="text-gray-600 mb-6 max-w-md mx-auto text-sm">Sigue esta guía para obtener tu <span class="font-bold text-[#B38E5D]">Clave de Inscripción 2026</span>.</p>
+                        
+                        <button onclick="document.getElementById('next-btn').click()" class="btn inline-block bg-[#002B5C] text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-[#003d82] animate-bounce mt-4">
+                            Comenzar Paso a Paso 👇
+                        </button>
                     </div>
                 </div>
 
-                <!-- Step 2: Create Account Instructions -->
+                <!-- Step 2: Create Account -->
                 <div id="step-2" class="step-card hidden-step">
                     <div class="text-center">
                         <div class="text-6xl mb-4">👤</div>
-                        <h2 class="text-2xl font-bold text-[#002B5C] mb-4">Crea tu Cuenta</h2>
+                        <h2 class="text-2xl font-bold text-[#002B5C] mb-4">1. Registro de Nueva Cuenta</h2>
                         <div class="space-y-6">
                             <div class="grid md:grid-cols-2 gap-6 text-left">
-                                <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
                                     <div class="flex items-start mb-3">
-                                        <span class="bg-[#B38E5D] text-white rounded-full h-6 w-6 text-sm flex items-center justify-center font-bold mr-3 flex-shrink-0">1</span>
-                                        <span>Haz clic en <strong class="text-[#002B5C]">"Iniciar sesión (ingresar)"</strong>.</span>
+                                        <span class="bg-[#B38E5D] text-white rounded-full h-6 w-6 text-xs flex items-center justify-center font-bold mr-3 flex-shrink-0">A</span>
+                                        <span class="text-sm">En la plataforma, haz clic en <strong class="text-[#002B5C]">"Iniciar sesión"</strong>.</span>
                                     </div>
-                                    <img src="https://live.staticflickr.com/65535/54581828867_284b605b55_b.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Imagen+de+Inicio+de+Sesi%C3%B3n';" alt="Ubicación del botón Iniciar Sesión" class="rounded-lg shadow-md w-full">
+                                    <img src="https://live.staticflickr.com/65535/54581828867_284b605b55_b.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Iniciar+Sesi%C3%B3n';" alt="Botón Iniciar Sesión" class="rounded-lg shadow-md w-full">
                                 </div>
-                                <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
                                     <div class="flex items-start mb-3">
-                                        <span class="bg-[#B38E5D] text-white rounded-full h-6 w-6 text-sm flex items-center justify-center font-bold mr-3 flex-shrink-0">2</span>
-                                        <span>Selecciona <strong class="text-[#002B5C]">"Comience ahora creando una cuenta nueva"</strong>.</span>
+                                        <span class="bg-[#B38E5D] text-white rounded-full h-6 w-6 text-xs flex items-center justify-center font-bold mr-3 flex-shrink-0">B</span>
+                                        <span class="text-sm">Selecciona <strong class="text-[#002B5C]">"Comience ahora creando una cuenta"</strong>.</span>
                                     </div>
-                                    <img src="https://live.staticflickr.com/65535/54581828842_0bd0b92bc1_b.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Imagen+de+Crear+Cuenta';" alt="Ubicación del enlace para crear cuenta nueva" class="rounded-lg shadow-md w-full">
+                                    <img src="https://live.staticflickr.com/65535/54581828842_0bd0b92bc1_b.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Crear+Cuenta';" alt="Enlace crear cuenta" class="rounded-lg shadow-md w-full">
                                 </div>
-                            </div>
-                            <div class="bg-gray-50 p-4 rounded-lg text-left">
-                                <div class="flex items-start mb-3">
-                                    <span class="bg-[#B38E5D] text-white rounded-full h-6 w-6 text-sm flex items-center justify-center font-bold mr-3 flex-shrink-0">3</span>
-                                    <span class="flex-1">Llena el formulario. <strong class="text-[#002B5C]">¡Recuerda bien tu usuario y contraseña!</strong></span>
-                                </div>
-                                    <img src="https://live.staticflickr.com/65535/54582179947_22f20932e3_b.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Formulario+de+Registro';" alt="Formulario de registro de nueva cuenta" class="rounded-lg shadow-md w-full">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 3: Registration message -->
+                <!-- Step 3: Confirmation -->
                 <div id="step-3" class="step-card hidden-step">
-                     <div class="grid md:grid-cols-2 gap-8 items-center">
-                        <div class="text-center md:text-left">
-                            <div class="text-6xl mb-4">📬</div>
-                            <h2 class="text-2xl font-bold text-[#002B5C] mb-2">Mensaje de Envío</h2>
-                            <p class="text-gray-600 mb-6">Después de crear tu cuenta, verás esta pantalla. Haz clic en <strong class="text-[#002B5C]">Continuar</strong> y prepárate para revisar tu correo.</p>
-                        </div>
-                        <div class="flex justify-center h-80">
-                             <img src="https://live.staticflickr.com/65535/54582698401_06a0006691_z.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Mensaje+de+Env%C3%ADo';" alt="Mensaje de 'Hemos enviado un correo'" class="rounded-lg shadow-lg object-contain w-full h-full">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 4: Registration Confirmed -->
-                <div id="step-4" class="step-card hidden-step">
-                     <div class="grid md:grid-cols-2 gap-8 items-center">
-                        <div class="text-center md:text-left">
-                            <div class="text-6xl mb-4">👍</div>
-                            <h2 class="text-2xl font-bold text-[#002B5C] mb-2">¡Confirma tu Registro!</h2>
-                            <p class="text-gray-600 mb-6">Ve a tu correo, haz clic en el enlace de confirmación y verás esta pantalla. Haz clic en <strong class="text-[#002B5C]">Continuar</strong> para ir al último paso.</p>
-                        </div>
-                        <div class="flex justify-center h-80">
-                             <img src="https://live.staticflickr.com/65535/54583016405_5da57b2303_b.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Registro+Confirmado';" alt="Pantalla de registro confirmado" class="rounded-lg shadow-lg object-contain w-full h-full">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 5: Enroll in Course -->
-                <div id="step-5" class="step-card hidden-step">
-                    <div class="text-center">
-                         <div class="text-6xl mb-4">✍️</div>
-                        <h2 class="text-2xl font-bold text-[#002B5C] mb-4">Inscríbete en el Taller</h2>
-                        <p class="text-gray-600 mb-8">¡Ya casi! Ahora que tienes tu cuenta confirmada, inscríbete al curso.</p>
+                     <div class="text-center">
+                        <div class="text-6xl mb-4">📬</div>
+                        <h2 class="text-2xl font-bold text-[#002B5C] mb-4">2. Confirmación Obligatoria</h2>
                         <div class="grid md:grid-cols-2 gap-6 text-left">
-                             <!-- Instruction 1 -->
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="flex items-start mb-3">
-                                    <span class="bg-[#B38E5D] text-white rounded-full h-6 w-6 text-sm flex items-center justify-center font-bold mr-3 flex-shrink-0">1</span>
-                                    <span>Busca y selecciona el curso: <strong class="text-[#002B5C]">"Taller de Nudos Quirúrgicos Manuales"</strong>.</span>
-                                </div>
-                                <img src="https://live.staticflickr.com/65535/54583016410_ee25a404b4_z.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Seleccionar+Curso';" alt="Ubicación del Taller en la lista de cursos" class="rounded-lg shadow-md w-full">
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                <p class="text-gray-600 mb-4 text-xs font-semibold">PASO A: Verás este mensaje al terminar el formulario.</p>
+                                <img src="https://live.staticflickr.com/65535/54582698401_06a0006691_z.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Mensaje+Env%C3%ADo';" alt="Confirmación envío" class="rounded-lg shadow-md w-full">
                             </div>
-                            <!-- Instruction 2 -->
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="flex items-start mb-3">
-                                    <span class="bg-[#B38E5D] text-white rounded-full h-6 w-6 text-sm flex items-center justify-center font-bold mr-3 flex-shrink-0">2</span>
-                                    <span>Introduce la clave del curso.</span>
-                                </div>
-                                <img src="https://live.staticflickr.com/65535/54582877574_51b6a9ab8d_z.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Ingresar+Clave';" alt="Campo para ingresar la clave de inscripción" class="rounded-lg shadow-md w-full">
-                                <div class="bg-amber-100 p-3 rounded-md mt-4">
-                                     <p class="text-gray-700 text-sm font-medium">Clave de Inscripción:</p>
-                                     <p class="text-xl font-bold text-[#002B5C] tracking-widest">Tnudos.2025</p>
-                                </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                <p class="text-gray-600 mb-4 text-xs font-semibold">PASO B: Revisa tu correo y haz clic en el link recibido.</p>
+                                <img src="https://live.staticflickr.com/65535/54583016405_5da57b2303_b.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Registro+Ok';" alt="Cuenta confirmada" class="rounded-lg shadow-md w-full">
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Key (ACTUALIZADA) -->
+                <div id="step-4" class="step-card hidden-step">
+                    <div class="text-center">
+                         <div class="text-6xl mb-4">🔑</div>
+                        <h2 class="text-2xl font-bold text-[#002B5C] mb-4">3. Clave del Curso 2026</h2>
+                        <p class="text-gray-600 mb-6 text-sm">Busca el curso <strong>"Taller de Nudos Quirúrgicos Manuales 2026"</strong> y copia esta clave:</p>
+                        
+                        <div class="bg-amber-50 border-2 border-amber-200 p-6 rounded-xl max-w-sm mx-auto shadow-inner mb-8">
+                            <p class="text-3xl font-black text-[#002B5C] tracking-widest mb-4" id="course-key">Nudos.USIP</p>
+                            <button id="copy-btn" onclick="copyKey()" class="btn bg-[#B38E5D] text-white font-bold py-2 px-6 rounded-lg shadow hover:bg-amber-700 w-full flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                Copiar Clave
+                            </button>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6 text-left">
+                            <img src="https://live.staticflickr.com/65535/54583016410_ee25a404b4_z.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Elegir+Curso';" alt="Lista de cursos" class="rounded-lg shadow-md w-full">
+                            <img src="https://live.staticflickr.com/65535/54582877574_51b6a9ab8d_z.jpg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/eef5ff/002B5C?text=Poner+Clave';" alt="Ingreso clave" class="rounded-lg shadow-md w-full">
                         </div>
                     </div>
                 </div>
                 
-                <!-- Step 6: Finished -->
-                <div id="step-6" class="step-card hidden-step">
+                <!-- Step 5: Finish -->
+                <div id="step-5" class="step-card hidden-step">
                     <div class="text-center">
-                        <div class="text-6xl mb-4">🎉</div>
-                        <h2 class="text-2xl font-bold text-[#002B5C] mb-2">¡Felicidades, te has inscrito!</h2>
-                        <p class="text-gray-600 mb-8 max-w-md mx-auto">Has completado todos los pasos. Ya puedes acceder a todo el contenido del Taller. ¡Mucho éxito!</p>
-                        <a href="https://usip.fmposgrado.unam.mx/plataforma/login/index.php" target="_blank" class="btn inline-block bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700">
-                            Ir al curso ahora
+                        <div class="text-6xl mb-4">🚀</div>
+                        <h2 class="text-2xl font-bold text-[#002B5C] mb-2">¡Comienza tu Capacitación!</h2>
+                        <p class="text-gray-600 mb-8 max-w-sm mx-auto text-sm">Ya tienes los pasos y la clave copiada. Haz clic abajo para entrar a la plataforma USIP.</p>
+                        
+                        <a href="https://usip.fmposgrado.unam.mx/plataforma/login/index.php" target="_blank" class="btn inline-block bg-green-600 text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:bg-green-700 text-lg transform hover:scale-105">
+                            Ir a Plataforma USIP 2026
                         </a>
+                        <p class="text-[10px] text-gray-400 mt-6">Versión 2.0 - Edición 2026</p>
                     </div>
                 </div>
             </div>
 
             <!-- Navigation Buttons -->
-            <div class="flex justify-between mt-10 pt-6 border-t border-gray-200">
-                <button id="prev-btn" class="btn bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400 invisible">
-                    Anterior
+            <div class="flex justify-between mt-10 pt-6 border-t border-gray-100">
+                <button id="prev-btn" class="btn bg-gray-200 text-gray-600 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 invisible">
+                    Volver
                 </button>
-                <button id="next-btn" class="btn bg-[#002B5C] text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-[#003d82]">
+                <button id="next-btn" class="btn bg-[#002B5C] text-white font-bold py-2 px-8 rounded-lg shadow-md hover:bg-[#003d82]">
                     Siguiente
                 </button>
             </div>
         </main>
         
-        <!-- Troubleshooting Section -->
-        <footer class="mt-8 text-center text-gray-500">
-             <details class="bg-white rounded-lg p-4 shadow-md text-left cursor-pointer border border-gray-200">
-                <summary class="font-medium text-gray-700 hover:text-[#002B5C]">¿Problemas? Contacto y Soluciones</summary>
-                <div class="mt-4 text-sm space-y-4">
-                    <p><strong>¿No recibiste el correo?</strong> Revisa tu carpeta de "Spam" o "Correo no deseado".</p>
-                    <p><strong>¿La clave no funciona?</strong> Asegúrate de escribirla exactamente como se muestra: `Tnudos.2025` (mayúsculas y minúsculas importan).</p>
-                    <hr>
-                    <p>Para soporte adicional, contacta a:</p>
-                    <p class="font-semibold text-[#002B5C]">Ing. Elba Berrocal Pérez</p>
-                    <p><strong>Teléfono:</strong> 5556237280</p>
-                    <p class="italic">División de Estudios de Posgrado, Facultad de Medicina, UNAM</p>
+        <footer class="mt-8 text-center">
+             <details class="bg-white rounded-lg p-4 shadow-sm text-left cursor-pointer border border-gray-100 max-w-2xl mx-auto">
+                <summary class="font-medium text-gray-500 text-sm">Soporte Técnico USIP</summary>
+                <div class="mt-4 text-xs space-y-2 text-gray-600">
+                    <p>• <strong>Error de clave:</strong> Verifica que no existan espacios al pegar.</p>
+                    <p>• <strong>Soporte:</strong> Ing. Elba Berrocal Pérez - 5556237280</p>
                 </div>
             </details>
         </footer>
@@ -223,12 +171,11 @@
 
     <script>
         const steps = [
-            { id: 1, progress: 10, phase: 'Fase 1 de 3' },
-            { id: 2, progress: 30, phase: 'Fase 1 de 3' },
-            { id: 3, progress: 50, phase: 'Fase 2 de 3' },
-            { id: 4, progress: 70, phase: 'Fase 2 de 3' },
-            { id: 5, progress: 85, phase: 'Fase 3 de 3' },
-            { id: 6, progress: 100, phase: 'Completado' },
+            { id: 1, progress: 20, phase: 'Introducción' },
+            { id: 2, progress: 40, phase: '1. Registro' },
+            { id: 3, progress: 60, phase: '2. Confirmación' },
+            { id: 4, progress: 80, phase: '3. Matriculación' },
+            { id: 5, progress: 100, phase: 'Finalizado' }
         ];
         let currentStepIndex = 0;
 
@@ -255,37 +202,65 @@
             progressText.textContent = currentStepInfo.phase;
             
             if (currentStepInfo.progress === 100) {
-                progressText.textContent = '¡Completado!';
-                progressBar.classList.remove('bg-[#B38E5D]');
-                progressBar.classList.add('bg-green-500');
+                progressBar.classList.replace('bg-[#B38E5D]', 'bg-green-500');
             } else {
-                progressBar.classList.remove('bg-green-500');
-                progressBar.classList.add('bg-[#B38E5D]');
+                progressBar.classList.replace('bg-green-500', 'bg-[#B38E5D]');
             }
 
             prevBtn.style.visibility = currentStepIndex > 0 ? 'visible' : 'hidden';
-            if (currentStepIndex === steps.length - 1) {
-                 nextBtn.style.display = 'none';
-            } else {
-                nextBtn.style.display = 'inline-block';
-            }
+            nextBtn.style.visibility = (currentStepIndex === 0 || currentStepIndex === steps.length - 1) ? 'hidden' : 'visible';
+            
+            if (currentStepIndex === steps.length - 1) nextBtn.style.display = 'none';
+            else nextBtn.style.display = 'inline-block';
         }
 
-        nextBtn.addEventListener('click', () => {
-            if (currentStepIndex < steps.length - 1) {
-                currentStepIndex++;
-                updateUI();
-            }
-        });
+        nextBtn.addEventListener('click', () => { if (currentStepIndex < steps.length - 1) { currentStepIndex++; updateUI(); } });
+        prevBtn.addEventListener('click', () => { if (currentStepIndex > 0) { currentStepIndex--; updateUI(); } });
 
-        prevBtn.addEventListener('click', () => {
-            if (currentStepIndex > 0) {
-                currentStepIndex--;
-                updateUI();
-            }
-        });
+        function copyKey() {
+            const keyText = "Nudos.USIP";
+            const el = document.createElement('textarea');
+            el.value = keyText;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            const btn = document.getElementById('copy-btn');
+            btn.innerHTML = "¡Copiada! ✅";
+            btn.classList.replace('bg-[#B38E5D]', 'bg-green-600');
+            
+            setTimeout(() => {
+                btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Copiar Clave`;
+                btn.classList.replace('bg-green-600', 'bg-[#B38E5D]');
+            }, 2500);
+        }
 
         updateUI();
+
+        // --- NUEVO CÓDIGO: Funcionalidad para ampliar imágenes (Lightbox) ---
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300 cursor-zoom-out';
+        modal.innerHTML = '<img id="modal-img" class="max-w-full max-h-full rounded-lg shadow-2xl" src=""><div class="absolute top-4 right-6 text-white text-4xl font-bold">&times;</div>';
+        document.body.appendChild(modal);
+
+        // Cerrar al hacer clic
+        modal.addEventListener('click', () => {
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        });
+
+        // Agregar evento a todas las imágenes de la guía
+        document.querySelectorAll('.step-card img').forEach(img => {
+            img.classList.add('cursor-zoom-in', 'hover:opacity-80', 'transition-opacity', 'border', 'border-gray-200');
+            img.title = "Haz clic para ampliar la imagen";
+            img.addEventListener('click', () => {
+                document.getElementById('modal-img').src = img.src;
+                modal.classList.remove('hidden');
+                // Pequeño retraso para la animación
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            });
+        });
     </script>
 </body>
 </html>
